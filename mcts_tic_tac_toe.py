@@ -102,39 +102,14 @@ def monte_carlo_tree_search(state,marker):
             child = child.expansion()
             res = child.rollout()
             child.backpropagation(res)
-    print('done')
     return max(root.children, key = lambda c: c.visited).done_action
 
-board = [0 for _ in range(9)]
-opponent_marker = -1
-player_marker = 1
-turn = random.choice([-1,1])
-if turn == 1:
-    print('You begin')
-else:
-    print('Your opponent begins')
-print_board(board)
-while reward_of_state(board,player_marker) == 0 and possible_actions(board):
-    if turn == 1:
-        action = 10
-        while action not in possible_actions(board):
-            print('Please enter action')
-            action = int(input())-1
-        board = do_action(board, action, player_marker)
-        print_board(board)
 
-    if turn == -1:
-        ai_action = monte_carlo_tree_search(board,opponent_marker)
-        board = do_action(board, ai_action, opponent_marker)
-        print_board(board)
-    
-    turn *= -1
+def create_board():
+    board = [0 for _ in range(9)]
+    opponent = -1
+    player = 1
+    turn = random.choice([-1,1])
+    return board,player,opponent,turn
 
-result = reward_of_state(board,player_marker)
-if result == 1:
-    print('You won')
-elif result == -1:
-    print('You lost')
-else:
-    print('Draw')
 
